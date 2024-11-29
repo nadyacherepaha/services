@@ -21,12 +21,12 @@ axios.interceptors.request.use(
 
         return config;
     },
-    (error) => Promise.reject(error?.response?.data || error?.response || error)
+    (error) => Promise.reject(error?.response?.data || error?.response || error),
 );
 
 axios.interceptors.response.use(
     (response) => {
         return response.data ?? response;
     },
-    async (error) => Promise.reject(error?.response?.data || error?.response || error)
+    async (error) => Promise.reject(error?.response?.data || error?.response || error),
 );

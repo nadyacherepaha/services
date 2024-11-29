@@ -1,13 +1,13 @@
 {
-  "rules": {
-    "indentation": 4,
-    "string-quotes": "single",
-    "block-no-empty": [
-      true,
-      {
-        "ignore": ["comments"]
-      }
-    ],
-    "rule-empty-line-before": "always-multi-line"
-  }
+    "rules": {
+        "indentation": 4,
+        "string-quotes": "single",
+        "block-no-empty": [
+            true,
+            {
+                "ignore": ["comments"]
+            }
+        ],
+        "rule-empty-line-before": "always-multi-line"
+    }
 }
