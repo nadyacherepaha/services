@@ -15,7 +15,6 @@ export type RegisterRequestBody = {
     email: string;
     name: string;
     phone: string;
-    socials: string[];
     password: string;
 };
 

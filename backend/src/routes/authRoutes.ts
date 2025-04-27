@@ -29,7 +29,7 @@ const generateTokens = (user: User): Tokens => {
 
 router.post('/register', async (req: TypedRequestBody<RegisterRequestBody>, res: Response): Promise<void> => {
     try {
-        const { email, name, phone, socials, password } = req.body;
+        const { email, name, phone, password } = req.body;
         const existingUser = await UserModel.findOne({ email });
 
         if (existingUser) {
@@ -38,7 +38,7 @@ router.post('/register', async (req: TypedRequestBody<RegisterRequestBody>, res:
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new UserModel({ email, name, phone, socials, role: 'user', password: hashedPassword });
+        const newUser = new UserModel({ email, name, phone, role: 'user', password: hashedPassword });
         await newUser.save();
         const userObject = newUser.toObject() as unknown as User;
         const tokens = generateTokens(userObject);
@@ -106,7 +106,7 @@ router.post('/refresh-token', (req: TypedRequestBody<RefreshTokenRequestBody>, r
                 const accessToken = jwt.sign(
                     { id: decoded.id },
                     process.env.JWT_SECRET || 'access_secret',
-                    { expiresIn: '15m' }
+                    { expiresIn: '24h' }
                 );
 
                 res.status(200).json({ accessToken });
