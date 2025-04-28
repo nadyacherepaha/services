@@ -3,12 +3,15 @@
         "module": "esnext",
         "target": "esnext",
         "jsx": "react-jsx",
-        "baseUrl": "./",
+        "baseUrl": "src",
         "paths": {
-            "lib/*": ["src/lib/*"],
-            "utils/*": ["src/utils/*"],
-            "context/*": ["src/context/*"],
-            "components/*": ["src/components/*"]
+            "@app/*": ["app/*"],
+            "@entities/*": ["entities/*"],
+            "@features/*": ["features/*"],
+            "@shared/*": ["shared/*"],
+            "@pages/*": ["pages/*"],
+            "@widgets/*": ["widgets/*"],
+            "@processes/*": ["processes/*"]
         },
         "allowSyntheticDefaultImports": true
     },

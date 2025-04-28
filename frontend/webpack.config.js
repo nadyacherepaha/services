@@ -1,3 +1,4 @@
+const CopyPlugin = require("copy-webpack-plugin");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
@@ -37,18 +38,26 @@ module.exports = {
     resolve: {
         extensions: [".js", ".jsx", ".ts", ".tsx"],
         alias: {
-            "lib": path.resolve(__dirname, "src/lib"),
-            "utils": path.resolve(__dirname, "src/utils"),
-            "context": path.resolve(__dirname, "src/context"),
-            "components": path.resolve(__dirname, "src/components"),
+            '@app': path.resolve(__dirname, 'src/app/'),
+            '@entities': path.resolve(__dirname, 'src/entities/'),
+            '@features': path.resolve(__dirname, 'src/features/'),
+            '@shared': path.resolve(__dirname, 'src/shared/'),
+            '@pages': path.resolve(__dirname, 'src/pages/'),
+            '@widgets': path.resolve(__dirname, 'src/widgets/'),
+            '@processes': path.resolve(__dirname, 'src/processes/'),
         },
         plugins: [new TsconfigPathsPlugin()],
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: "./public/index.html",
+            template: path.resolve(__dirname, 'src/index.html'),
         }),
         new Dotenv(),
+        new CopyPlugin({
+            patterns: [
+                { from: "public", to: "" },
+            ],
+        }),
     ],
     devServer: {
         static: path.resolve(__dirname, "dist"),

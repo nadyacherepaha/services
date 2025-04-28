@@ -17,7 +17,6 @@ type aware lint rules:
 - Configure the top-level `parserOptions` property like this:
 
 ```js
-export default tseslint.config({
     languageOptions: {
         // other options...
         parserOptions: {
@@ -32,13 +31,10 @@ export default tseslint.config({
   `tseslint.configs.strictTypeChecked`
 - Optionally add `...tseslint.configs.stylisticTypeChecked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the
-  config:
 
 ```js
-// eslint.config.js
 import react from 'eslint-plugin-react';
 
-export default tseslint.config({
     // Set the react version
     settings: { react: { version: '18.3' } },
     plugins: {

@@ -1,14 +1,14 @@
 import js from '@eslint/js';
-import globals from 'globals';
+import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
+import typescriptEslintParser from '@typescript-eslint/parser';
+import importPlugin from 'eslint-plugin-import';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
-import importPlugin from 'eslint-plugin-import';
-import typescriptEslintParser from '@typescript-eslint/parser';
-import typescriptEslintPlugin from '@typescript-eslint/eslint-plugin';
+import globals from 'globals';
 
 export default [
     {
-        ignores: ['dist', 'node_modules', '*.config.js'],
+        ignores: ['dist', 'node_modules', '*.axios.js'],
     },
     js.configs.recommended,
     {
