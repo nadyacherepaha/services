@@ -1,15 +1,17 @@
-import '@app/App.css';
-import { AuthProvider } from '@app/providers';
+// import '@app/App.css';
+import { AppProviders } from '@app/providers';
 import { AppRoutes } from '@app/routes';
-import { ThemeSwitcher } from '@features/themeSwitcher';
+import { ThemeSwitcher } from '@features/theme';
 import React from 'react';
 
 const App = () => {
     return (
-        <AuthProvider>
-            <AppRoutes/>
-            <ThemeSwitcher/>
-        </AuthProvider>
+        <AppProviders>
+            <div className="text-black bg-white dark:text-white dark:bg-zinc-900">
+                <AppRoutes/>
+                <ThemeSwitcher/>
+            </div>
+        </AppProviders>
     );
 };
 

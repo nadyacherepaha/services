@@ -26,17 +26,35 @@ module.exports = {
                 },
             },
             {
-                test: /\.css$/,
-                use: ["style-loader", "css-loader"],
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader", "postcss-loader"],
             },
             {
-                test: /\.(png|jpg|gif|svg)$/,
+                test: /\.(png|jpe?g|gif|woff2?|eot|ttf|otf)$/i,
                 type: "asset/resource",
+            },
+            {
+                test: /\.svg$/i,
+                issuer: /\.[jt]sx?$/,
+                use: [
+                    {
+                        loader: '@svgr/webpack',
+                        options: {
+                            svgo: true,
+                            svgoConfig: {
+                                plugins: [
+                                    { name: 'removeViewBox', active: false },
+                                    { name: 'cleanupIDs', active: true }
+                                ]
+                            }
+                        }
+                    }
+                ],
             },
         ],
     },
     resolve: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
+        extensions: [".js", ".jsx", ".ts", ".tsx", ".svg"],
         alias: {
             '@app': path.resolve(__dirname, 'src/app/'),
             '@entities': path.resolve(__dirname, 'src/entities/'),
