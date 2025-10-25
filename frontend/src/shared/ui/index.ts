@@ -6,3 +6,5 @@ export { ThemedBox } from './Box/ThemedBox';
 export type { ThemedBoxProps } from './Box/types';
 export { ThemedIcon } from './Icon/ThemedIcon';
 export type { ThemedIconProps } from './Icon/types';
+export { Input } from './Input/Input';
+export type { InputProps } from './Input/types';

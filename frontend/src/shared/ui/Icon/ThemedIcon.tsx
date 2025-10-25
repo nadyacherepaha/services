@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useTheme } from 'features/theme/model/useTheme';
 import React, { FC } from 'react';
-import { ThemedIconProps, ThemedIconSize } from './types';
+import { ThemedIconProps, ThemedIconSize, Tone } from './types';
 
 const sizeMap: Record<ThemedIconSize, string> = {
     sm: 'h-4 w-4',
@@ -9,16 +9,26 @@ const sizeMap: Record<ThemedIconSize, string> = {
     lg: 'h-6 w-6',
 };
 
-export const ThemedIcon: FC<ThemedIconProps> = ({ children, className, size = 'md', ...rest }) => {
-    const { color } = useTheme();
-    const isCustom = color === 'custom';
-    const c = isCustom ? 'primary' : color;
+export const ThemedIcon: FC<ThemedIconProps & { tone?: Tone }> = ({
+    children,
+    className,
+    size = 'md',
+    tone = 'accent',
+    ...rest
+}) => {
+    useTheme();
 
-    const themedClass = isCustom ? 'text-primary' : `text-${c}-500 dark:text-${c}-400`;
+    const themedClass =
+        tone === 'onPrimary'
+            ? 'text-[var(--on-primary)]'
+            : 'text-[var(--color-primary)]';
 
     return (
-        <span className={clsx('inline-flex items-center justify-center', themedClass, sizeMap[size], className)} {...rest}>
-            {children}
-        </span>
+        <span
+            className={clsx('inline-flex items-center justify-center', themedClass, sizeMap[size], className)}
+            {...rest}
+        >
+      {children}
+    </span>
     );
 };

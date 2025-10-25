@@ -1,4 +1,3 @@
-// import '@app/App.css';
 import { AppProviders } from '@app/providers';
 import { AppRoutes } from '@app/routes';
 import { ThemeSwitcher } from '@features/theme';
@@ -7,9 +6,11 @@ import React from 'react';
 const App = () => {
     return (
         <AppProviders>
-            <div className="text-black bg-white dark:text-white dark:bg-zinc-900">
+            <div className="text-black bg-white dark:text-white dark:bg-zinc-900 min-h-dvh">
                 <AppRoutes/>
-                <ThemeSwitcher/>
+                <div className="fixed bottom-0 right-0">
+                    <ThemeSwitcher/>
+                </div>
             </div>
         </AppProviders>
     );

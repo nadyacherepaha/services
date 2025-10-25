@@ -10,16 +10,10 @@ export const ThemedText: FC<ThemedTextProps> = ({
     underline,
     ...rest
 }) => {
-    const { color } = useTheme();
-    const isCustom = color === 'custom';
-    const c = isCustom ? 'primary' : color;
+    useTheme();
 
     const Tag = as as any;
-
-    const themedClass = isCustom
-        ? 'text-primary'
-        : `text-${c}-500 dark:text-${c}-400`;
-
+    const themedClass = 'text-[var(--color-primary)]';
     const underlineClass = underline ? 'underline decoration-current' : undefined;
 
     return (
@@ -28,5 +22,3 @@ export const ThemedText: FC<ThemedTextProps> = ({
         </Tag>
     );
 };
-
-

@@ -1,5 +1,6 @@
-import { ThemeColorId } from '@entities/themeColor/themeColors';
-import React, { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
+import { PRESET_HEX, ThemeColorId } from '@entities/themeColor/themeColors';
+import { pickReadableTextColor, shadeHex, withAlpha } from '@shared/utils';
+import React, { createContext, FC, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 
 interface ThemeContext {
     color: ThemeColorId;
@@ -39,14 +40,26 @@ export const ThemeProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setDark(next);
     };
 
+    const primaryHex = useMemo(() => {
+        if (color === 'custom' && hex) return hex;
+        if (color !== 'custom') return PRESET_HEX[color] ?? PRESET_HEX.blue;
+        return PRESET_HEX.blue;
+    }, [color, hex]);
+
+    const tokens = useMemo(() => {
+        const onPrimary = pickReadableTextColor(primaryHex, dark);
+        const hover = shadeHex(primaryHex, -0.07);
+        const ring = withAlpha(primaryHex, 0.5);
+        return { onPrimary, hover, ring };
+    }, [primaryHex, dark]);
+
     useEffect(() => {
         const root = document.documentElement;
-        if (color === 'custom' && hex) {
-            root.style.setProperty('--color-primary', hex);
-        } else {
-            root.style.removeProperty('--color-primary');
-        }
-    }, [color, hex]);
+        root.style.setProperty('--color-primary', primaryHex);
+        root.style.setProperty('--on-primary', tokens.onPrimary);
+        root.style.setProperty('--c-primary-hover', tokens.hover);
+        root.style.setProperty('--c-primary-ring', tokens.ring);
+    }, [primaryHex, tokens]);
 
     useEffect(() => {
         document.documentElement.classList.toggle('dark', dark);

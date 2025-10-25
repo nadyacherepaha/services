@@ -10,20 +10,23 @@ export const ThemedBox: FC<ThemedBoxProps> = ({
     tint = 'soft',
     ...rest
 }) => {
-    const { color } = useTheme();
-    const isCustom = color === 'custom';
-    const c = isCustom ? 'primary' : color;
+    useTheme();
 
     const Tag = as as any;
-
-    const bgClass = isCustom
-        ? (tint === 'solid' ? 'bg-primary' : 'bg-primary/10')
-        : (tint === 'solid'
-            ? `bg-${c}-500 dark:bg-${c}-400`
-            : `bg-${c}-50 dark:bg-${c}-500/10`);
+    const bgClass =
+        tint === 'solid'
+            ? 'bg-[var(--color-primary)] text-[var(--on-primary)]'
+            : tint === 'soft'
+                ? 'bg-[color-mix(in_srgb,var(--color-primary)_15%,transparent)] text-[var(--color-primary)] ' +
+                'dark:bg-[color-mix(in_srgb,var(--color-primary)_18%,transparent)]'
+                : 'bg-[color-mix(in_srgb,var(--color-primary)_10%,transparent)] text-[var(--color-primary)] ' +
+                'dark:bg-[color-mix(in_srgb,var(--color-primary)_15%,transparent)]';
 
     return (
-        <Tag className={clsx('rounded', bgClass, className)} {...rest}>
+        <Tag
+            className={clsx('rounded transition-colors', bgClass, className)}
+            {...rest}
+        >
             {children}
         </Tag>
     );
