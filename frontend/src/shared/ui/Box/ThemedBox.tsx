@@ -1,5 +1,5 @@
+import { useTheme } from '@features/theme/model/useTheme';
 import clsx from 'clsx';
-import { useTheme } from 'features/theme/model/useTheme';
 import React, { FC } from 'react';
 import { ThemedBoxProps } from './types';
 

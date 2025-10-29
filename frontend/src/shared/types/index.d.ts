@@ -12,6 +12,7 @@ interface RegisterParams {
     name: string,
     password: string,
     phone: string,
+    socials?: string,
 }
 
 interface RegisterResponse {

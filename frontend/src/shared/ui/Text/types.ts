@@ -1,9 +1,17 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import React, { ElementType } from 'react';
 
-export type ThemedTextAs = 'p' | 'span' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'a';
-
-export interface ThemedTextProps extends HTMLAttributes<HTMLElement> {
-    as?: ThemedTextAs;
-    children: ReactNode;
+export type ThemedTextOwnProps = {
     underline?: boolean;
-}
+    children: React.ReactNode;
+    className?: string;
+};
+
+export type PolymorphicRef<E extends ElementType> =
+    React.ComponentPropsWithRef<E>['ref'];
+
+export type PolymorphicProps<E extends ElementType, P> =
+    P & { as?: E } &
+    Omit<React.ComponentPropsWithoutRef<E>, keyof P | 'as' | 'color'>;
+
+export type ThemedTextProps<E extends ElementType = 'span'> =
+    PolymorphicProps<E, ThemedTextOwnProps>;

@@ -1,12 +1,8 @@
-import { AuthProvider } from '@app/providers';
+import { AppProvidersProps, AuthProvider } from '@app/providers';
 import { ThemeProvider } from '@features/theme/model/useTheme';
-import React, { ReactNode } from 'react';
+import React, { FC } from 'react';
 
-interface AppProvidersProps {
-    children: ReactNode;
-}
-
-export const AppProviders: React.FC<AppProvidersProps> = ({ children }) => {
+export const AppProviders: FC<AppProvidersProps> = ({ children }) => {
     return (
         <AuthProvider>
             <ThemeProvider>

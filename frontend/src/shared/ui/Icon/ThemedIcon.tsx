@@ -1,5 +1,5 @@
+import { useTheme } from '@features/theme/model/useTheme';
 import clsx from 'clsx';
-import { useTheme } from 'features/theme/model/useTheme';
 import React, { FC } from 'react';
 import { ThemedIconProps, ThemedIconSize, Tone } from './types';
 
@@ -7,6 +7,7 @@ const sizeMap: Record<ThemedIconSize, string> = {
     sm: 'h-4 w-4',
     md: 'h-5 w-5',
     lg: 'h-6 w-6',
+    custom: '',
 };
 
 export const ThemedIcon: FC<ThemedIconProps & { tone?: Tone }> = ({

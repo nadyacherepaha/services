@@ -1,24 +1,22 @@
+import { useTheme } from '@features/theme/model/useTheme';
 import clsx from 'clsx';
-import { useTheme } from 'features/theme/model/useTheme';
-import React, { FC } from 'react';
-import { ThemedTextProps } from './types';
+import React, { ElementType, forwardRef } from 'react';
+import { PolymorphicRef, ThemedTextProps } from './types';
 
-export const ThemedText: FC<ThemedTextProps> = ({
-    as = 'span',
-    children,
-    className,
-    underline,
-    ...rest
-}) => {
-    useTheme();
+export const ThemedText = forwardRef(
+    <E extends ElementType = 'span'>(
+        { as, underline, className, children, ...rest }: ThemedTextProps<E>,
+        ref: PolymorphicRef<E>
+    ) => {
+        useTheme();
+        const Tag = (as ?? 'span') as ElementType;
+        const themedClass = 'text-[var(--color-primary)]';
+        const underlineClass = underline ? 'underline decoration-current' : undefined;
 
-    const Tag = as as any;
-    const themedClass = 'text-[var(--color-primary)]';
-    const underlineClass = underline ? 'underline decoration-current' : undefined;
-
-    return (
-        <Tag className={clsx(themedClass, underlineClass, className)} {...rest}>
-            {children}
-        </Tag>
-    );
-};
+        return (
+            <Tag ref={ref} className={clsx(themedClass, underlineClass, className)} {...rest}>
+                {children}
+            </Tag>
+        );
+    }
+);

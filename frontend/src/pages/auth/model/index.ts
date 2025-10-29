@@ -1,2 +1,2 @@
-export { loginSchema, registerSchema } from './schema';
-export type { LoginParams, RegisterParams } from './types';
+export { loginSchema, registerSchema, forgotSchema, resetSchema } from './schema';
+export type { LoginParams, RegisterParams, ForgotParams, ResetParams } from './types';
