@@ -1,4 +1,5 @@
 import { AuthSuccess, ErrorPayload, RH, Tokens } from 'src/types';
+import { env } from '../env';
 import * as Auth from '../services/auth.service';
 import { getRefreshCookie, sendResetEmail } from '../utils';
 
@@ -38,20 +39,22 @@ export const logout: RH<{}, { ok: true }> = async (req, res) => {
     res.status(200).json(result);
 };
 
-export const forgot: RH<{}, { ok: true } | { error: string }> = async (req, res) => {
-    const { email } = req.body;
+export const forgot: RH<{}, { ok: true }> = async (req, res) => {
+    const { email } = req.body as { email?: string };
+    const APP_URL = env.APP_URL || `http://localhost:${env.FRONTEND_PORT}`;
 
-    const appUrl = process.env.APP_URL ?? 'http://localhost:5173';
-    const result = await Auth.issueResetToken(email, async (token) => {
-        const link = `${appUrl}/reset-password?token=${encodeURIComponent(token)}`;
-        await sendResetEmail(email, link);
-    });
-
-    if ('error' in result) {
+    try {
+        if (email) {
+            await Auth.issueResetToken(email, async (token) => {
+                const link = `${APP_URL}/reset-password?token=${encodeURIComponent(token)}`;
+                await sendResetEmail(email, link);
+            });
+        }
         res.status(200).json({ ok: true });
-        return;
+    } catch (e) {
+        console.error('forgot error:', e);
+        res.status(200).json({ ok: true });
     }
-    res.status(200).json(result);
 };
 
 export const reset: RH<{}, { ok: true } | { error: string }> = async (req, res) => {

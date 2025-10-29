@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { HydratedDocument } from 'mongoose';
+import { env } from '../env';
 import { toSafeUser, UserModel } from '../models/User';
 import type { AuthSuccess, ErrorPayload, Tokens } from '../types';
 import { User } from '../types';
@@ -15,7 +16,7 @@ import {
     sha256
 } from '../utils';
 
-const JWT_SECRET = process.env.JWT_SECRET ?? 'access_secret';
+const JWT_SECRET = env.JWT_SECRET ?? 'access_secret';
 
 async function issueSession(res: Response, userId: string): Promise<string> {
     const accessToken = jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: ACCESS_LIFETIME ?? '24h' });

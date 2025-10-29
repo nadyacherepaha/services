@@ -1,23 +1,20 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
+import { env } from './env';
 import authRoutes from './routes/auth.routes';
 
-dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT || 5000;
-const FRONTEND_PORT = process.env.FRONTEND_PORT || 5000;
+const PORT = env.PORT || 5000;
+const APP_URL = env.APP_URL || `http://localhost:${env.FRONTEND_PORT}`;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors(({ origin: `http://localhost:${FRONTEND_PORT}`, credentials: true, })));
-
+app.use(cors(({ origin: APP_URL, credentials: true, })));
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI || '')
+mongoose.connect(env.MONGO_URI || '')
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
