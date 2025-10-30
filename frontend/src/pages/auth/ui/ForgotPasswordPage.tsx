@@ -1,19 +1,23 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ForgotParams, forgotSchema } from '@pages/auth/model';
+import { createForgotSchema, type ForgotParams } from '@pages/auth/model';
 import { forgotPassword } from '@shared/api';
-import { routes } from '@shared/lib';
+import { useSafeT } from '@shared/i18n/hooks';
+import { useLocalizedRoutes } from '@shared/lib';
 import { FormField, ThemedButton, ThemedIcon, ThemedText } from '@shared/ui';
 import { Logo } from '@shared/ui/svg';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 export const ForgotPasswordPage = () => {
+    const tAuth = useSafeT('auth');
+    const R = useLocalizedRoutes();
     const [status, setStatus] = useState<'idle' | 'sent' | 'error'>('idle');
     const [msg, setMsg] = useState<string>('');
+    const schema = useMemo(() => createForgotSchema(tAuth), [tAuth]);
 
     const methods = useForm({
-        resolver: yupResolver(forgotSchema),
+        resolver: yupResolver<ForgotParams>(schema),
         mode: 'onSubmit',
         reValidateMode: 'onChange',
         defaultValues: { email: '' },
@@ -26,10 +30,10 @@ export const ForgotPasswordPage = () => {
         try {
             await forgotPassword(email);
             setStatus('sent');
-            setMsg('We’ve sent a reset link to your email.');
+            setMsg(tAuth('messages.reset_link_sent'));
         } catch (e: any) {
             setStatus('error');
-            setMsg(e?.error || 'Failed to send reset email');
+            setMsg(e?.error || tAuth('messages.reset_failed'));
         }
     };
 
@@ -42,14 +46,20 @@ export const ForgotPasswordPage = () => {
                     </ThemedIcon>
                 </div>
                 <h2 className="mt-6 text-center text-2xl/9 font-bold tracking-tight text-zinc-700 dark:text-white">
-                    Forgot Password
+                    {tAuth('title.forgot')}
                 </h2>
             </div>
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form onSubmit={methods.handleSubmit(onSubmit)} noValidate className="space-y-6">
                     <FormProvider {...methods}>
-                        <FormField name="email" label="Email address" type="email" autoComplete="email"/>
+                        <FormField
+                            name="email"
+                            label={tAuth('fields.email')}
+                            placeholder={tAuth('placeholders.email')}
+                            type="email"
+                            autoComplete="email"
+                        />
                     </FormProvider>
 
                     {status !== 'idle' && (
@@ -70,14 +80,14 @@ export const ForgotPasswordPage = () => {
                         disabled={methods.formState.isSubmitting}
                         className="w-full text-sm/6 font-semibold"
                     >
-                        Send reset link
+                        {tAuth('buttons.send_link')}
                     </ThemedButton>
                 </form>
 
                 <p className="mt-10 text-center text-sm/6 text-gray-400">
-                    Remembered your password?{' '}
-                    <ThemedText as={Link} to={routes.signIn} className="font-semibold hover:underline">
-                        Sign In
+                    {tAuth('links.remembered')}{' '}
+                    <ThemedText as={Link} to={R.signIn} className="font-semibold hover:underline">
+                        {tAuth('links.signin')}
                     </ThemedText>
                 </p>
             </div>

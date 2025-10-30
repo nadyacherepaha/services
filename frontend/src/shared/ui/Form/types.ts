@@ -6,4 +6,5 @@ export type Props = {
     type?: HTMLInputTypeAttribute;
     autoComplete?: string;
     optional?: boolean;
+    placeholder?: string;
 };

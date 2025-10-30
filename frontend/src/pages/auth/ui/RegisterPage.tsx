@@ -1,30 +1,29 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { RegisterParams, registerSchema } from '@pages/auth/model';
-import { routes, useAuth } from '@shared/lib';
+import { createRegisterSchema, type RegisterParams } from '@pages/auth/model';
+import { useSafeT } from '@shared/i18n/hooks';
+import { useAuth, useLocalizedRoutes } from '@shared/lib';
 import { FormField, ThemedButton, ThemedIcon, ThemedText } from '@shared/ui';
 import { Logo } from '@shared/ui/svg';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 export const RegisterPage = () => {
-    const { register: registerUser, error } = useAuth();
+    const { register, error } = useAuth();
+    const R = useLocalizedRoutes();
+    const tAuth = useSafeT('auth');
+    const schema = useMemo(() => createRegisterSchema(tAuth), [tAuth]);
+
     const methods = useForm({
-        resolver: yupResolver(registerSchema),
+        resolver: yupResolver<RegisterParams>(schema),
         mode: 'onSubmit',
         reValidateMode: 'onChange',
-        defaultValues: {
-            name: '',
-            email: '',
-            phone: '',
-            socials: '',
-            password: '',
-        },
+        defaultValues: { name: '', email: '', phone: '', socials: '', password: '' },
     });
 
     const onSubmit = async (data: RegisterParams) => {
         const { email, name, phone, password, socials } = data;
-        await registerUser({ email, name, phone, password, socials });
+        await register({ email, name, phone, password, socials });
     };
 
     useEffect(() => {
@@ -43,24 +42,24 @@ export const RegisterPage = () => {
                     </div>
 
                     <h2 className="mt-6 text-center text-2xl/9 font-bold tracking-tight text-zinc-700 dark:text-white">
-                        Sign up
+                        {tAuth('title.register')}
                     </h2>
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form onSubmit={methods.handleSubmit(onSubmit)} noValidate className="space-y-6">
                         <FormProvider {...methods}>
-                            <FormField name="name" label="Name" autoComplete="name"/>
-                            <FormField name="email" label="Email address" type="email" autoComplete="email"/>
-                            <FormField name="phone" label="Phone" type="tel" autoComplete="tel"/>
-                            <FormField name="socials" label="Socials (Link)" optional/>
-
-                            <FormField
-                                name="password"
-                                label="Password"
-                                type="password"
-                                autoComplete="new-password"
-                            />
+                            <FormField name="name" label={tAuth('fields.name')} placeholder={tAuth('placeholders.name')}
+                                       autoComplete="name"/>
+                            <FormField name="email" label={tAuth('fields.email')}
+                                       placeholder={tAuth('placeholders.email')} type="email" autoComplete="email"/>
+                            <FormField name="phone" label={tAuth('fields.phone')}
+                                       placeholder={tAuth('placeholders.phone')} type="tel" autoComplete="tel"/>
+                            <FormField name="socials" label={tAuth('fields.socials')}
+                                       placeholder={tAuth('placeholders.socials')} optional/>
+                            <FormField name="password" label={tAuth('fields.password')}
+                                       placeholder={tAuth('placeholders.password')} type="password"
+                                       autoComplete="new-password"/>
                         </FormProvider>
 
                         {error && (
@@ -77,14 +76,14 @@ export const RegisterPage = () => {
                             disabled={methods.formState.isSubmitting}
                             className="w-full text-sm/6 font-semibold"
                         >
-                            Sign Up
+                            {tAuth('buttons.register')}
                         </ThemedButton>
                     </form>
 
                     <p className="mt-10 text-center text-sm/6 text-gray-400">
-                        Already have an account?{' '}
-                        <ThemedText as={Link} to={routes.signIn} className="font-semibold hover:underline">
-                            Sign In
+                        {tAuth('links.already_have')}{' '}
+                        <ThemedText as={Link} to={R.signIn} className="font-semibold hover:underline">
+                            {tAuth('links.signin')}
                         </ThemedText>
                     </p>
                 </div>

@@ -1,22 +1,25 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { LoginParams, loginSchema } from '@pages/auth/model';
-import { routes, useAuth } from '@shared/lib';
+import { createLoginSchema, type LoginParams } from '@pages/auth/model';
+import { useSafeT } from '@shared/i18n/hooks';
+import { useAuth, useLocalizedRoutes } from '@shared/lib';
 import { FormField, ThemedButton, ThemedIcon, ThemedText } from '@shared/ui';
 import { Logo } from '@shared/ui/svg';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import type { ObjectSchema } from 'yup';
 
 export const LoginPage = () => {
     const { login, error } = useAuth();
+    const R = useLocalizedRoutes();
+    const tAuth = useSafeT('auth');
+    const schema = useMemo<ObjectSchema<LoginParams>>(() => createLoginSchema(tAuth), [tAuth]);
+
     const methods = useForm({
-        resolver: yupResolver(loginSchema),
+        resolver: yupResolver<LoginParams>(schema),
         mode: 'onSubmit',
         reValidateMode: 'onChange',
-        defaultValues: {
-            email: '',
-            password: '',
-        },
+        defaultValues: { email: '', password: '' },
     });
 
     const onSubmit = async (data: LoginParams) => {
@@ -35,26 +38,33 @@ export const LoginPage = () => {
                     </div>
 
                     <h2 className="mt-6 text-center text-2xl/9 font-bold tracking-tight text-zinc-700 dark:text-white">
-                        Sign In
+                        {tAuth('title.login')}
                     </h2>
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form onSubmit={methods.handleSubmit(onSubmit)} noValidate className="space-y-6">
                         <FormProvider {...methods}>
-                            <FormField name="email" label="Email address" type="email" autoComplete="email"/>
+                            <FormField
+                                name="email"
+                                label={tAuth('fields.email')}
+                                placeholder={tAuth('placeholders.email')}
+                                type="email"
+                                autoComplete="email"
+                            />
                             <FormField
                                 name="password"
-                                label="Password"
+                                label={tAuth('fields.password')}
+                                placeholder={tAuth('placeholders.password')}
                                 type="password"
-                                autoComplete="password"
+                                autoComplete="current-password"
                                 labelRight={
                                     <ThemedText
                                         as={Link}
-                                        to={routes.forgotPassword}
+                                        to={R.forgotPassword}
                                         className="text-sm font-semibold hover:underline"
                                     >
-                                        Forgot password?
+                                        {tAuth('links.forgot')}
                                     </ThemedText>
                                 }
                             />
@@ -74,14 +84,14 @@ export const LoginPage = () => {
                             disabled={methods.formState.isSubmitting}
                             className="w-full text-sm/6 font-semibold"
                         >
-                            Sign In
+                            {tAuth('buttons.login')}
                         </ThemedButton>
                     </form>
 
                     <p className="mt-10 text-center text-sm/6 text-gray-400">
-                        Don’t have an account?{' '}
-                        <ThemedText as={Link} to={routes.signUp} className="font-semibold hover:underline">
-                            Sign Up
+                        {tAuth('links.no_account')}{' '}
+                        <ThemedText as={Link} to={R.signUp} className="font-semibold hover:underline">
+                            {tAuth('links.signup')}
                         </ThemedText>
                     </p>
                 </div>

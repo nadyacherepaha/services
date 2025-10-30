@@ -1,7 +1,4 @@
-import { forgotSchema, loginSchema, registerSchema, resetSchema } from '@pages/auth/model/schema';
-import { InferType } from 'yup';
-
-export type LoginParams = InferType<typeof loginSchema>;
-export type RegisterParams = InferType<typeof registerSchema>;
-export type ForgotParams = InferType<typeof forgotSchema>;
-export type ResetParams = InferType<typeof resetSchema>;
+export type LoginParams = { email: string; password: string };
+export type RegisterParams = { name: string; email: string; phone: string; socials?: string; password: string };
+export type ForgotParams = { email: string };
+export type ResetParams = { password: string; confirm: string };

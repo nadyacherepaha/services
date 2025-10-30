@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { Props } from './types';
 
 export const FormField: FC<Props> = ({
-    name, label, type = 'text', autoComplete, optional, labelRight, helper,
+    name, label, type = 'text', autoComplete, optional, labelRight, helper, placeholder,
 }) => {
     const { register, formState: { errors } } = useFormContext();
     const err = (errors as any)[name]?.message as string | undefined;
@@ -24,6 +24,7 @@ export const FormField: FC<Props> = ({
                     id={id}
                     type={type}
                     autoComplete={autoComplete}
+                    placeholder={placeholder}
                     aria-invalid={!!err || undefined}
                     aria-describedby={err ? `${id}-error` : undefined}
                     {...register(name as any, { required: !optional })}
